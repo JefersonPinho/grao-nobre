@@ -55,7 +55,7 @@ export function CartSheet({ open, onOpenChange, items, catalog, onItemsChange }:
             Confira os produtos antes de enviar.
           </SheetDescription>
         </SheetHeader>
-        <div className="min-h-0 flex-1 overflow-x-hidden overflow-y-auto px-4 py-4">
+        <div className="min-h-0 flex-1 overflow-x-hidden overflow-y-auto px-4 pt-2 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
           {items.length === 0 ? (
             <EmptyState
               title="Seu pedido está vazio"
@@ -80,10 +80,13 @@ export function CartSheet({ open, onOpenChange, items, catalog, onItemsChange }:
               })}
             </div>
           )}
-        </div>
-        <div className="max-h-[58dvh] shrink-0 overflow-x-hidden overflow-y-auto border-t border-border bg-background px-4 pt-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
-          <p className="mb-3 text-xl font-bold">Total {formatCurrency(total)}</p>
-          <CheckoutForm lines={lines} total={total} disabled={items.length === 0} />
+          <div className="mt-6 border-t border-border pt-6">
+            <div className="mb-4 flex items-end justify-between gap-3">
+              <p className="text-lg font-semibold text-muted-foreground">Total</p>
+              <p className="text-3xl leading-none font-extrabold">{formatCurrency(total)}</p>
+            </div>
+            <CheckoutForm lines={lines} total={total} disabled={items.length === 0} />
+          </div>
         </div>
       </SheetContent>
     </Sheet>

@@ -15,7 +15,7 @@ export function Header({ query, onQueryChange, count, total, onOpenCart }: Heade
   return (
     <header className="sticky top-0 z-30 border-b border-border bg-background">
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-2.5 px-4 py-2.5 md:gap-3 md:py-3">
-        <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center justify-center gap-3 md:justify-between">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/logo/logo-horizontal.png"

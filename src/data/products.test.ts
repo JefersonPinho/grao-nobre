@@ -6,7 +6,7 @@ const banned = ["cura", "combate", "glicemia", "circulação", "emagrece", "doen
 
 describe("catálogo importado", () => {
   it("contém os produtos da tabela de 02/09/2026", () => {
-    expect(products).toHaveLength(299)
+    expect(products).toHaveLength(296)
   })
 
   it("tem código, nome, categoria e preço por quilo em todos os itens", () => {
@@ -24,7 +24,7 @@ describe("catálogo importado", () => {
   })
 
   it("mantém identificadores únicos quando a tabela repete um código", () => {
-    expect(new Set(products.map((product) => product.id)).size).toBe(299)
+    expect(new Set(products.map((product) => product.id)).size).toBe(296)
     expect(products.filter((product) => product.code === "25.013")).toHaveLength(2)
   })
 
@@ -33,6 +33,7 @@ describe("catálogo importado", () => {
       expect(product.category).not.toBe("Embalagens")
       expect(product.name).not.toMatch(/\bW3\b/)
       expect(product.name).not.toMatch(/\bW4\b/)
+      expect(product.name).not.toContain("W1S")
       expect(product.name.toLowerCase()).not.toContain("pasta de castanha")
     }
   })

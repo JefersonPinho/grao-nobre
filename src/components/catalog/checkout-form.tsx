@@ -51,9 +51,9 @@ export function CheckoutForm({ lines, total, disabled }: CheckoutFormProps) {
   }
 
   return (
-    <form className="space-y-3" noValidate onSubmit={handleSubmit}>
+    <form className="space-y-4" noValidate onSubmit={handleSubmit}>
       <div className="space-y-2">
-        <Label htmlFor="cliente" className="text-base">
+        <Label htmlFor="cliente" className="text-base font-semibold">
           Seu nome
         </Label>
         <Input
@@ -64,7 +64,7 @@ export function CheckoutForm({ lines, total, disabled }: CheckoutFormProps) {
           value={name}
           aria-invalid={error && !name.trim() ? true : undefined}
           aria-describedby={error ? "erro-pedido" : undefined}
-          className="h-12 text-base"
+          className="h-12 rounded-xl bg-background text-base"
           onChange={(event) => {
             setName(event.target.value)
             if (error) setError("")
@@ -74,20 +74,20 @@ export function CheckoutForm({ lines, total, disabled }: CheckoutFormProps) {
       </div>
       {showNotes ? (
         <div className="space-y-2">
-          <Label htmlFor="observacoes" className="text-base">
+          <Label htmlFor="observacoes" className="text-base font-semibold">
             Observações (opcional)
           </Label>
           <textarea
             id="observacoes"
             name="observacoes"
             value={notes}
-            rows={2}
-            className="w-full rounded-xl border border-input bg-transparent px-3 py-3 text-base outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+            rows={3}
+            className="w-full rounded-xl border border-input bg-background px-3 py-3 text-base outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
             onChange={(event) => setNotes(event.target.value)}
           />
         </div>
       ) : (
-        <Button type="button" variant="ghost" size="xl" className="w-full text-primary" onClick={() => setShowNotes(true)}>
+        <Button type="button" variant="outline" size="xl" className="w-full bg-background" onClick={() => setShowNotes(true)}>
           Escrever uma observação
         </Button>
       )}
@@ -99,7 +99,11 @@ export function CheckoutForm({ lines, total, disabled }: CheckoutFormProps) {
       <Button type="submit" size="xl" className="h-14 w-full text-lg" disabled={disabled}>
         Enviar pedido pelo WhatsApp
       </Button>
-      <p className="text-base text-muted-foreground">Sem pagamento aqui. A confirmação é no WhatsApp.</p>
+      <p className="rounded-xl bg-secondary px-4 py-3 text-center text-base leading-snug font-semibold text-foreground">
+        Sem pagamento aqui.
+        <br />
+        A confirmação é no WhatsApp.
+      </p>
       {toast ? (
         <div
           role="alert"

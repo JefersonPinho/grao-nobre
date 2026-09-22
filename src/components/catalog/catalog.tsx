@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
-import { ChevronLeft } from "lucide-react"
+import { ChevronLeft, ChevronUp } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { CartSheet } from "@/components/catalog/cart-sheet"
 import { CategoryHero, CategoryPicker, categoryImage } from "@/components/catalog/category-filter"
@@ -12,7 +12,7 @@ import { products } from "@/data/products"
 import { useCart } from "@/hooks/use-cart"
 import { addToCart, cartItemCount, cartTotal } from "@/lib/cart"
 import { formatCurrency } from "@/lib/format"
-import { matchesSearch } from "@/lib/search"
+import { catalogGroups, groupMatchesSearch } from "@/lib/product-groups"
 import type { Product } from "@/types/product"
 
 const PAGE_SIZE = 24
@@ -26,14 +26,13 @@ export function Catalog() {
   const [notice, setNotice] = useState("")
 
   const filtered = useMemo(() => {
-    return products.filter((product) => {
-      if (!product.active) return false
-      if (category && product.category !== category) return false
-      return matchesSearch(product.name, query)
+    return catalogGroups.filter((group) => {
+      if (category && group.category !== category) return false
+      return groupMatchesSearch(group, query)
     })
   }, [category, query])
 
-  const visibleProducts = filtered.slice(0, visible)
+  const visibleGroups = filtered.slice(0, visible)
   const count = cartItemCount(items)
   const total = cartTotal(items, products)
   const searching = query.trim().length > 0
@@ -136,14 +135,26 @@ export function Catalog() {
         ) : (
           <>
             <h2 className="sr-only">Produtos</h2>
-            <ProductGrid products={visibleProducts} onAdd={handleAdd} />
+            <ProductGrid groups={visibleGroups} query={query} onAdd={handleAdd} />
             <div className="mt-6 flex flex-col items-center gap-3">
               <p className="text-base text-muted-foreground">
-                Mostrando {visibleProducts.length} de {filtered.length}
+                Mostrando {visibleGroups.length} de {filtered.length}
               </p>
               {visible < filtered.length ? (
                 <Button type="button" size="xl" className="h-14 w-full max-w-md text-lg" onClick={() => setVisible((current) => current + PAGE_SIZE)}>
                   Carregar mais produtos
+                </Button>
+              ) : null}
+              {category ? (
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="xl"
+                  className="h-14 w-full max-w-md text-lg"
+                  onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                >
+                  <ChevronUp className="size-6" aria-hidden="true" />
+                  Voltar ao topo
                 </Button>
               ) : null}
             </div>
