@@ -8,4 +8,6 @@ export type Product = {
   image: string
   description: string
   active: boolean
+  soldBy?: "unit"
+  unitLabel?: string
 }

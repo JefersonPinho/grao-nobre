@@ -1,14 +1,19 @@
 import type { CartLine } from "@/types/cart"
 import type { Product } from "@/types/product"
-import { priceForGrams } from "@/lib/pricing"
+import { priceForGrams, priceForUnit } from "@/lib/pricing"
 import { normalizeWeight } from "@/lib/weight"
 
 export function createLineId(productId: string, grams: number) {
   return `${productId}:${grams}`
 }
 
-export function addToCart(items: CartLine[], productId: string, grams: number): CartLine[] {
-  const weight = normalizeWeight(grams)
+export function addToCart(
+  items: CartLine[],
+  productId: string,
+  grams: number,
+  options?: { unit?: boolean },
+): CartLine[] {
+  const weight = options?.unit ? 1 : normalizeWeight(grams)
   const lineId = createLineId(productId, weight)
   const existing = items.find((item) => item.lineId === lineId)
 
@@ -34,6 +39,7 @@ export function removeFromCart(items: CartLine[], lineId: string) {
 }
 
 export function lineUnitPrice(product: Product, grams: number) {
+  if (product.soldBy === "unit") return priceForUnit(product.supplierPricePerKg)
   return priceForGrams(product.supplierPricePerKg, grams)
 }
 
@@ -63,7 +69,7 @@ export function isCartLine(value: unknown): value is CartLine {
     typeof line.productId === "string" &&
     typeof line.grams === "number" &&
     typeof line.quantity === "number" &&
-    line.grams >= 50 &&
+    (line.grams === 1 || line.grams >= 50) &&
     line.quantity > 0
   )
 }

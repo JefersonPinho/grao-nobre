@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { ProductImage } from "@/components/catalog/product-image"
 import { WeightSelector } from "@/components/catalog/weight-selector"
 import { formatCurrency, formatWeight } from "@/lib/format"
-import { priceForGrams } from "@/lib/pricing"
+import { priceForGrams, priceForUnit } from "@/lib/pricing"
 import type { Product } from "@/types/product"
 
 type ProductCardProps = {
@@ -16,7 +16,8 @@ type ProductCardProps = {
 export function ProductCard({ product, onAdd }: ProductCardProps) {
   const [grams, setGrams] = useState(100)
   const [added, setAdded] = useState(false)
-  const selectedPrice = priceForGrams(product.supplierPricePerKg, grams)
+  const byUnit = product.soldBy === "unit"
+  const selectedPrice = byUnit ? priceForUnit(product.supplierPricePerKg) : priceForGrams(product.supplierPricePerKg, grams)
 
   useEffect(() => {
     if (!added) return
@@ -36,9 +37,9 @@ export function ProductCard({ product, onAdd }: ProductCardProps) {
           <p className="text-base font-semibold text-copper">{product.category}</p>
           <h3 className="mt-1 text-xl leading-snug font-bold">{product.name}</h3>
         </div>
-        <WeightSelector productId={product.id} grams={grams} onChange={setGrams} />
+        {byUnit ? null : <WeightSelector productId={product.id} grams={grams} onChange={setGrams} />}
         <div className="mt-auto flex items-end justify-between gap-3 border-t border-border pt-3">
-          <p className="text-base text-muted-foreground">{formatWeight(grams)}</p>
+          <p className="text-base text-muted-foreground">{byUnit ? `1 unidade · ${product.unitLabel}` : formatWeight(grams)}</p>
           <p className="text-2xl leading-none font-extrabold" aria-live="polite">
             {formatCurrency(selectedPrice)}
           </p>
@@ -48,7 +49,7 @@ export function ProductCard({ product, onAdd }: ProductCardProps) {
           size="xl"
           className="h-14 w-full text-lg"
           onClick={() => {
-            onAdd(product, grams)
+            onAdd(product, byUnit ? 1 : grams)
             setAdded(true)
           }}
         >

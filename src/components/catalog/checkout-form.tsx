@@ -1,6 +1,6 @@
 "use client"
 
-import { FormEvent, useState } from "react"
+import { FormEvent, useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -17,12 +17,21 @@ export function CheckoutForm({ lines, total, disabled }: CheckoutFormProps) {
   const [notes, setNotes] = useState("")
   const [showNotes, setShowNotes] = useState(false)
   const [error, setError] = useState("")
+  const [toast, setToast] = useState("")
+
+  useEffect(() => {
+    if (!toast) return
+    const timeout = window.setTimeout(() => setToast(""), 7000)
+    return () => window.clearTimeout(timeout)
+  }, [toast])
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     const customerName = name.trim()
     if (!customerName) {
-      setError("Informe seu nome para enviar o pedido.")
+      const message = "Escreva seu nome para enviar o pedido."
+      setError(message)
+      setToast(message)
       document.getElementById("cliente")?.focus()
       return
     }
@@ -59,6 +68,7 @@ export function CheckoutForm({ lines, total, disabled }: CheckoutFormProps) {
           onChange={(event) => {
             setName(event.target.value)
             if (error) setError("")
+            if (toast) setToast("")
           }}
         />
       </div>
@@ -90,6 +100,14 @@ export function CheckoutForm({ lines, total, disabled }: CheckoutFormProps) {
         Enviar pedido pelo WhatsApp
       </Button>
       <p className="text-base text-muted-foreground">Sem pagamento aqui. A confirmação é no WhatsApp.</p>
+      {toast ? (
+        <div
+          role="alert"
+          className="fixed top-4 right-4 left-4 z-[80] mx-auto max-w-md rounded-2xl border-2 border-destructive bg-card px-5 py-4 text-lg font-bold text-foreground shadow-lg"
+        >
+          {toast}
+        </div>
+      ) : null}
     </form>
   )
 }

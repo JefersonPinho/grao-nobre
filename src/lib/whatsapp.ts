@@ -7,6 +7,7 @@ export type WhatsAppLine = {
   grams: number
   quantity: number
   subtotal: number
+  quantityLabel?: string
 }
 
 export function buildOrderMessage(input: {
@@ -17,7 +18,7 @@ export function buildOrderMessage(input: {
 }) {
   const items = input.lines
     .map((line) => {
-      const weight = line.grams % 1000 === 0 ? `${line.grams / 1000}kg` : `${line.grams}g`
+      const weight = line.quantityLabel ?? (line.grams % 1000 === 0 ? `${line.grams / 1000}kg` : `${line.grams}g`)
       const price = formatCurrency(line.subtotal)
       return [`*${line.name}*`, `* *Quantidade:* ${line.quantity} x ${weight}`, `* *Valor:* ${price}`].join("\n")
     })

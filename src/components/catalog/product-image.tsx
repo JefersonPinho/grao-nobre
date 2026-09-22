@@ -16,12 +16,13 @@ function syncImageStatus(image: HTMLImageElement, setStatus: (status: "ready" | 
 }
 
 export function ProductImage({ src, name, className }: ProductImageProps) {
-  const [status, setStatus] = useState<"loading" | "ready" | "missing">("loading")
+  const hasSrc = src.trim().length > 0
+  const [status, setStatus] = useState<"loading" | "ready" | "missing">(hasSrc ? "loading" : "missing")
   const letter = name.trim().charAt(0).toLocaleUpperCase("pt-BR")
 
   return (
     <div className={cn("relative aspect-[4/3] w-full overflow-hidden bg-secondary", className)}>
-      {status !== "missing" ? (
+      {hasSrc && status !== "missing" ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
           src={src}

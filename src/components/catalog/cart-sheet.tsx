@@ -41,6 +41,7 @@ export function CartSheet({ open, onOpenChange, items, catalog, onItemsChange }:
         grams: line.grams,
         quantity: line.quantity,
         subtotal: lineSubtotal(product, line),
+        quantityLabel: product.soldBy === "unit" ? product.unitLabel?.replace(/\s+/g, "") : undefined,
       },
     ]
   })

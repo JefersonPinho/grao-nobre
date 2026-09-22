@@ -31,7 +31,9 @@ export function CartItem({
         <h3 className="text-lg leading-snug font-bold">{name}</h3>
         <p className="shrink-0 text-lg font-bold">{formatCurrency(subtotal)}</p>
       </div>
-      <p className="mt-1 text-base text-muted-foreground">{formatWeight(line.grams)}</p>
+      <p className="mt-1 text-base text-muted-foreground">
+        {product?.soldBy === "unit" ? product.unitLabel : formatWeight(line.grams)}
+      </p>
       <div className="mt-3 flex items-center gap-2">
         <Button
           type="button"

@@ -12,3 +12,7 @@ export function priceForGrams(supplierPricePerKg: number, grams: number) {
   const exactPrice = sellingPricePerKg(supplierPricePerKg) * (grams / 1000)
   return roundUpToFiftyCents(exactPrice)
 }
+
+export function priceForUnit(supplierPrice: number) {
+  return roundUpToFiftyCents(sellingPricePerKg(supplierPrice))
+}

@@ -1,5 +1,3 @@
-export const ALL_CATEGORIES = "Todos"
-
 export const categories = [
   "Adoçantes",
   "Amendoins",
@@ -7,6 +5,7 @@ export const categories = [
   "Castanhas de caju",
   "Castanhas do Pará",
   "Chips",
+  "Coco",
   "Chás e ervas",
   "Drageados",
   "Farináceos",
